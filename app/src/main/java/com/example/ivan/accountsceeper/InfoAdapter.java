@@ -11,13 +11,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Map;
 
-class myAdapter extends BaseAdapter {
+class InfoAdapter extends BaseAdapter {
 
     Context context;
     private LayoutInflater inflater;
     ArrayList<Map<String, String>> data;
 
-    public myAdapter(Context ctx, ArrayList<Map<String, String>> data) {
+    public InfoAdapter(Context ctx, ArrayList<Map<String, String>> data) {
         this.data = data;
         context = ctx;
         inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -50,10 +50,9 @@ class myAdapter extends BaseAdapter {
         TextView textValue = view.findViewById(R.id.textValue);
         textValue.setText(data.get(position).get("value"));
 
-        boolean hideField;
-        hideField = Boolean.parseBoolean(data.get(position).get("hideField"));
+        boolean isHide = Boolean.parseBoolean(data.get(position).get("hideField"));
 
-        if (hideField)
+        if (isHide)
             textValue.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD);
         else
             view.findViewById(R.id.imageView).setVisibility(View.INVISIBLE);

@@ -25,9 +25,7 @@ public class AccountInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        Intent intent = getIntent();
-
-        String name = intent.getStringExtra("name");
+        String name = getIntent().getStringExtra("name");
         setTitle(name);
 
         DataBase dataBase = new DataBase(this);
@@ -47,7 +45,7 @@ public class AccountInfo extends AppCompatActivity {
             } while (cursor.moveToNext());
         }
 
-        myAdapter adapter = new myAdapter(this, list);
+        InfoAdapter adapter = new InfoAdapter(this, list);
 
         ListView listInfo = findViewById(R.id.listInfo);
         listInfo.setAdapter(adapter);
@@ -67,7 +65,7 @@ public class AccountInfo extends AppCompatActivity {
         }
     };
 
-    public void imgClick(View view) {
+    public void viewClick(View view) {
         View parentView = (View) view.getParent();
         TextView textValue =  parentView.findViewById(R.id.textValue);
         if (textValue.getInputType() == InputType.TYPE_CLASS_TEXT)
@@ -77,7 +75,6 @@ public class AccountInfo extends AppCompatActivity {
     }
 
     public void copyClick(View view) {
-
         String text = ((TextView) ((View) view.getParent()).findViewById(R.id.textValue)).getText().toString();
 
         ClipboardManager clipboard = (ClipboardManager) AccountInfo.this.getSystemService(Context.CLIPBOARD_SERVICE);

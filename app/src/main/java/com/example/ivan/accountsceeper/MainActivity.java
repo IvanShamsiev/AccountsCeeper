@@ -21,12 +21,11 @@ public class MainActivity extends AppCompatActivity {
     private DataBase dataBase;
     ListView listView;
     SimpleCursorAdapter adapter;
-    View selectedView;
 
-    public static final int editId = 1;
-    public static final int deleteId = 2;
-    public static final int optionsId = 3;
-    public static final int exitId = 4;
+    private static final int editId = 1;
+    private static final int deleteId = 2;
+    private static final int optionsId = 3;
+    private static final int exitId = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,17 +78,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         menu.add(0, optionsId, 1, "Настройки");
         menu.add(0, exitId, 2, "Выход");
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -108,25 +101,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0, editId, 1, "Изменить аккаунт");
         menu.add(0, deleteId, 2, "Удалить аккаунт");
-        selectedView = v;
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo acmi;
+        AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case editId:
-                acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 Intent intent = new Intent(MainActivity.this, CreateAccount.class);
                 intent.putExtra("account", "edit");
                 intent.putExtra("name", ((TextView) acmi.targetView.findViewById(R.id.textName)).getText().toString());
                 startActivityForResult(intent, 0);
                 break;
             case deleteId:
-                acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
                 dataBase.deleteAccount(((TextView) acmi.targetView.findViewById(R.id.textName)).getText().toString());
                 adapter.changeCursor(dataBase.getAccountsData());
                 break;

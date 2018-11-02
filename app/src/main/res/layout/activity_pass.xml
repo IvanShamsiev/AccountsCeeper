@@ -12,15 +12,20 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="120dp"
         android:layout_marginEnd="8dp"
-        android:ems="20"
+        android:cursorVisible="false"
+        android:hint="Введите пароль"
         android:includeFontPadding="true"
         android:inputType="numberPassword"
+        android:singleLine="true"
         android:textAlignment="center"
+
         android:textSize="20pt"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

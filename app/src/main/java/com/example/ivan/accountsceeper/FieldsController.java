@@ -27,11 +27,6 @@ class FieldsController {
         for (HashMap<String, String> map: list) {
             addField(map);
         }
-//        for (int i = 0; i < list.size(); i++) {
-//            addField(list.get(i));
-//        }
-//        addField(list.get(0));
-//        addField(list.get(1));
     }
 
 
@@ -40,7 +35,7 @@ class FieldsController {
         LinearLayout layout = new LinearLayout(context);
         layout.setLayoutParams(params);
 
-        inflater.inflate(R.layout.create_item, layout);
+        inflater.inflate(R.layout.edit_item, layout);
 
         EditText editName = layout.findViewById(R.id.editName);
         EditText editValue = layout.findViewById(R.id.editValue);
@@ -110,14 +105,5 @@ class FieldsController {
         }
 
         return fieldsData;
-
-//        String text = "";
-//        for (int i = 0; i < fields.size(); i++) {
-//            LinearLayout layout = fields.get(i);
-//            EditText editName = layout.findViewById(R.id.editName);
-//            EditText editValue = layout.findViewById(R.id.editValue);
-//            text += editName.getText().toString() + ": " + editValue.getText().toString() + "\n";
-//        }
-//        return text;
     }
 }

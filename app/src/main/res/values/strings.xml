@@ -7,5 +7,6 @@
     <string name="textData"><u>Данные для хранения</u></string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="title_pass">Введите пароль</string>
+    <string name="toastText">Значение поля было скопировано в буфер обмена</string>
     <string name="space"><u> </u></string>
 </resources>

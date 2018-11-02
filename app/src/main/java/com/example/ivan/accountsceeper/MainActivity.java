@@ -15,6 +15,7 @@ import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,16 +31,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent passIntent = new Intent(this, PassActivity.class);
+        startActivityForResult(passIntent, 0);
+    }
+
+    private void start() {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        setTitle(R.string.title_activity_main);
 
         dataBase = new DataBase(this);
 
         String[] from = {"name", "img", "account", "type"};
         int[] to = {R.id.textName, R.id.imageView, R.id.textAccount, R.id.textType};
 
-        adapter = new SimpleCursorAdapter(this, R.layout.list_item,
+        adapter = new SimpleCursorAdapter(this, R.layout.main_item,
                 dataBase.getAccountsData(), from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
         listView = findViewById(R.id.listView);
@@ -54,32 +63,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        adapter.changeCursor(dataBase.getAccountsData());
+        if ((requestCode == 1 || requestCode == 2 || requestCode == 3) && adapter != null)
+            adapter.changeCursor(dataBase.getAccountsData());
+        if (requestCode == 0 && resultCode == 0) {
+            start();
+        }
     }
 
     AdapterView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Intent intent = new Intent(MainActivity.this, AccountInfo.class);
+            Intent intent = new Intent(MainActivity.this, AccInfoActivity.class);
             intent.putExtra("name", ((TextView) view.findViewById(R.id.textName)).getText().toString());
             intent.putExtra("img", R.id.imageView);
-            startActivity(intent);
+            startActivityForResult(intent, 3);
         }
     };
 
     View.OnClickListener fabOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(MainActivity.this, CreateAccount.class);
+            Intent intent = new Intent(MainActivity.this, EditActivity.class);
             intent.putExtra("account", "create");
-            startActivityForResult(intent, 0);
+            startActivityForResult(intent, 1);
         }
     };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
         menu.add(0, optionsId, 1, "Настройки");
         menu.add(0, exitId, 2, "Выход");
         return super.onCreateOptionsMenu(menu);
@@ -110,10 +121,10 @@ public class MainActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case editId:
-                Intent intent = new Intent(MainActivity.this, CreateAccount.class);
+                Intent intent = new Intent(MainActivity.this, EditActivity.class);
                 intent.putExtra("account", "edit");
                 intent.putExtra("name", ((TextView) acmi.targetView.findViewById(R.id.textName)).getText().toString());
-                startActivityForResult(intent, 0);
+                startActivityForResult(intent, 2);
                 break;
             case deleteId:
                 dataBase.deleteAccount(((TextView) acmi.targetView.findViewById(R.id.textName)).getText().toString());
@@ -121,5 +132,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dataBase.close();
     }
 }

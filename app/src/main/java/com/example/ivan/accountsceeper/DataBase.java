@@ -26,6 +26,11 @@ class DataBase {
         database = dbHelper.getWritableDatabase();
     }
 
+    void close() {
+        dbHelper.close();
+        database.close();
+    }
+
     boolean checkAccountName(String accountName) {
         Cursor c = database.rawQuery("Select * from accounts where name = ?", new String[]{accountName});
         boolean isClear = c.getCount() == 0;

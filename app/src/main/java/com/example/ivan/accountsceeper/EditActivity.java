@@ -1,5 +1,6 @@
 package com.example.ivan.accountsceeper;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +15,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CreateAccount extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity {
 
     private FieldsController fieldsController;
     private String[] iconNames = {"Стандартная иконка", "ВКонтакте", "Яндекс"};
@@ -25,11 +26,10 @@ public class CreateAccount extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_account);
+        setContentView(R.layout.activity_edit);
 
         dataBase = new DataBase(this);
         ArrayList<HashMap<String, String>> list = new ArrayList<>();
-        HashMap<String, String> map;
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, iconNames);
@@ -39,64 +39,64 @@ public class CreateAccount extends AppCompatActivity {
         // заголовок
         spinner.setPrompt("Выбор иконки");
 
-
-        if (getIntent().getStringExtra("account").equals("create")) {
-            setTitle("Новый аккаунт");
-
-            map = new HashMap<>();
-            map.put("name", "Логин");
-            map.put("value", "");
-            map.put("inputType", "visible");
-            list.add(map);
-            map = new HashMap<>();
-            map.put("name", "Пароль");
-            map.put("value", "");
-            map.put("inputType", "hidden");
-            list.add(map);
-
-            // выделяем элемент
-            spinner.setSelection(0);
-
-            findViewById(R.id.layoutEdit).setVisibility(View.GONE);
-        } else if (getIntent().getStringExtra("account").equals("edit")) {
-            setTitle("Редактирование аккаунта");
-
-            String name = getIntent().getStringExtra("name");
-            String other = "";
-            String type = "";
-            int img = 0;
-            Cursor cursor = dataBase.getAccountData(name);
-            if (cursor.moveToFirst()) {
-                other = cursor.getString(cursor.getColumnIndex("account"));
-                type = cursor.getString(cursor.getColumnIndex("type"));
-                img = cursor.getInt(cursor.getColumnIndex("img"));
-            }
-            ((EditText) findViewById(R.id.editAccountName)).setText(name);
-            ((EditText) findViewById(R.id.editOther)).setText(other);
-            ((EditText) findViewById(R.id.editType)).setText(type);
-            for (int i = 0; i < iconNames.length; i++) if (img == icons[i]) spinner.setSelection(i);
-
-            cursor = dataBase.getLogPassData(name);
-            if (cursor.moveToFirst()) {
-                do {
-                    map = new HashMap<>();
-                    map.put("name", cursor.getString(cursor.getColumnIndex("field")));
-                    map.put("value", cursor.getString(cursor.getColumnIndex("value")));
-                    map.put("inputType", cursor.getString(cursor.getColumnIndex("hidden")).equals("true") ? "hidden" : "visible");
-                    list.add(map);
-                } while (cursor.moveToNext());
-            }
-
-
-            findViewById(R.id.buttonConfim).setVisibility(View.GONE);
-        }
-
-
+        if (getIntent().getStringExtra("account").equals("create")) create(list, spinner);
+        if (getIntent().getStringExtra("account").equals("edit")) edit(list, spinner);
 
         LinearLayout layoutForFields = findViewById(R.id.layoutForFields);
 
         fieldsController = new FieldsController(this, layoutForFields, list);
 
+    }
+
+    void create(ArrayList<HashMap<String, String>> list, Spinner spinner) {
+        setTitle("Новый аккаунт");
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("name", "Логин");
+        map.put("value", "");
+        map.put("inputType", "visible");
+        list.add(map);
+        map = new HashMap<>();
+        map.put("name", "Пароль");
+        map.put("value", "");
+        map.put("inputType", "hidden");
+        list.add(map);
+
+        spinner.setSelection(0);
+
+        findViewById(R.id.layoutEdit).setVisibility(View.GONE);
+    }
+
+    void edit(ArrayList<HashMap<String, String>> list, Spinner spinner) {
+        setTitle("Редактирование аккаунта");
+
+        String name = getIntent().getStringExtra("name");
+        String other = "";
+        String type = "";
+        int img = 0;
+        Cursor cursor = dataBase.getAccountData(name);
+        if (cursor.moveToFirst()) {
+            other = cursor.getString(cursor.getColumnIndex("account"));
+            type = cursor.getString(cursor.getColumnIndex("type"));
+            img = cursor.getInt(cursor.getColumnIndex("img"));
+        }
+        ((EditText) findViewById(R.id.editAccountName)).setText(name);
+        ((EditText) findViewById(R.id.editOther)).setText(other);
+        ((EditText) findViewById(R.id.editType)).setText(type);
+        for (int i = 0; i < iconNames.length; i++) if (img == icons[i]) spinner.setSelection(i);
+
+        cursor = dataBase.getLogPassData(name);
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("name", cursor.getString(cursor.getColumnIndex("field")));
+                map.put("value", cursor.getString(cursor.getColumnIndex("value")));
+                map.put("inputType", cursor.getString(cursor.getColumnIndex("hidden")).equals("true") ? "hidden" : "visible");
+                list.add(map);
+            } while (cursor.moveToNext());
+        }
+
+        findViewById(R.id.buttonConfim).setVisibility(View.GONE);
     }
 
 
@@ -167,7 +167,10 @@ public class CreateAccount extends AppCompatActivity {
 
         dataBase.addAccount(fieldsData);
 
-        setResult(0);
+        Intent intent = new Intent();
+        intent.putExtra("accountName", accountName);
+
+        setResult(1, intent);
         finish();
 
     }

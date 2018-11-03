@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     SimpleCursorAdapter adapter;
 
-    private static final int editId = 1;
-    private static final int deleteId = 2;
+    public static final int editId = 1;
+    public static final int deleteId = 2;
     private static final int optionsId = 3;
     private static final int exitId = 4;
 
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         setTitle(R.string.title_activity_main);
 
-        dataBase = new DataBase(this);
+        dataBase = DataBase.getDataBase(this);
 
         String[] from = {"name", "img", "account", "type"};
         int[] to = {R.id.textName, R.id.imageView, R.id.textAccount, R.id.textType};

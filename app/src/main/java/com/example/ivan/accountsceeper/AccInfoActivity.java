@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,13 +27,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.ivan.accountsceeper.MainActivity.deleteId;
+import static com.example.ivan.accountsceeper.MainActivity.editId;
+
 public class AccInfoActivity extends AppCompatActivity {
 
     String name;
     private DataBase dataBase;
     private ListView listInfo;
-    private static final int editId = 1;
-    private static final int deleteId = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class AccInfoActivity extends AppCompatActivity {
         name = getIntent().getStringExtra("name");
         setTitle(name);
 
-        dataBase = new DataBase(this);
+        dataBase = DataBase.getDataBase(this);
 
         Cursor cursor = dataBase.getLogPassData(name);
 
@@ -176,11 +176,5 @@ public class AccInfoActivity extends AppCompatActivity {
 
             return view;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        dataBase.close();
     }
 }

@@ -12,6 +12,7 @@ import java.util.ListIterator;
 
 class DataBase {
 
+    private static DataBase dataBase;
     private Context context;
     private DBHelper dbHelper;
     private SQLiteDatabase database;
@@ -20,10 +21,16 @@ class DataBase {
     private int[] icons = {android.R.drawable.sym_def_app_icon, R.drawable.vk, R.drawable.yandex};
 
 
-    DataBase(Context ctx) {
+    private DataBase(Context ctx) {
         context = ctx;
         dbHelper = new DBHelper();
         database = dbHelper.getWritableDatabase();
+    }
+
+    public static DataBase getDataBase(Context ctx) {
+        if (dataBase == null)
+            dataBase = new DataBase(ctx);
+        return dataBase;
     }
 
     void close() {

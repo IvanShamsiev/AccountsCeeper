@@ -28,7 +28,7 @@ public class EditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        dataBase = new DataBase(this);
+        dataBase = DataBase.getDataBase(this);
         ArrayList<HashMap<String, String>> list = new ArrayList<>();
 
 

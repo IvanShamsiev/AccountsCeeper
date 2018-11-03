@@ -13,7 +13,6 @@ import java.util.ListIterator;
 class DataBase {
 
     private static DataBase dataBase;
-    private Context context;
     private DBHelper dbHelper;
     private SQLiteDatabase database;
 
@@ -22,12 +21,11 @@ class DataBase {
 
 
     private DataBase(Context ctx) {
-        context = ctx;
-        dbHelper = new DBHelper();
+        dbHelper = new DBHelper(ctx);
         database = dbHelper.getWritableDatabase();
     }
 
-    public static DataBase getDataBase(Context ctx) {
+    static DataBase getDataBase(Context ctx) {
         if (dataBase == null)
             dataBase = new DataBase(ctx);
         return dataBase;
@@ -99,7 +97,7 @@ class DataBase {
 
     private class DBHelper extends SQLiteOpenHelper {
 
-        DBHelper() {
+        DBHelper(Context context) {
             super(context, "myDataBase", null, 1);
         }
 

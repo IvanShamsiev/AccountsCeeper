@@ -46,7 +46,7 @@ public class AccInfoActivity extends AppCompatActivity {
         name = getIntent().getStringExtra("name");
         setTitle(name);
 
-        dataBase = DataBase.getDataBase(this);
+        dataBase = DataBase.getDataBase(getApplicationContext());
 
         Cursor cursor = dataBase.getLogPassData(name);
 

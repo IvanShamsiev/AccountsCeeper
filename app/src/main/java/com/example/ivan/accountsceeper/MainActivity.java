@@ -133,9 +133,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        dataBase.close();
-    }
 }
